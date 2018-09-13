@@ -26,8 +26,9 @@ requirements:
     - pyyaml
     - wrapt
     - six >=1.5
-    - mock  # [py27]
-    - contextlib2  # [py27]
+    - mock          # [py27]
+    - contextlib2   # [py27]
+    - yarl          # [py>34]
 
 test:
   # Python imports
