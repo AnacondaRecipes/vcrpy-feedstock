@@ -33,6 +33,9 @@ requirements:
 {% set deselect_tests = " --deselect=tests/unit/test_unittest.py::test_testcase_playback" %}
 {% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_stubs.py::TestVCRConnection::test_body_consumed_once_stream" %}
 {% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_stubs.py::TestVCRConnection::test_body_consumed_once_iterator" %}
+# WIN path errors not found file with "/", neeeds "\\".
+{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_unittest.py::test_cassette_library_dir" %}  # [win]
+{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_unittest.py::test_vcr_kwargs_cassette_dir" %}  # [win]
 test:
   source_files:
     - tests
