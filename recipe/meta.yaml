@@ -1,18 +1,18 @@
 {% set name = "vcrpy" %}
-{% set version = "6.0.1" %}
+{% set version = "7.0.0" %}
 
 package:
-  name: {{ name|lower }}
+  name: {{ name }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/vcrpy-{{ version }}.tar.gz
-  sha256: 9e023fee7f892baa0bbda2f7da7c8ac51165c1c6e38ff8688683a12a4bde9278
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: 176391ad0425edde1680c5b20738ea3dc7fb942520a48d2993448050986b3a50
 
 build:
-  skip: true  # [py<38]
-  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   number: 0
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  skip: true  # [py<39]
 
 requirements:
   host:
@@ -26,17 +26,32 @@ requirements:
     - wrapt
     - yarl
     - urllib3 <2  # [py<310]
+    - urllib3  # [py>=310]
 
+# E   ModuleNotFoundError: No module named 'pytest_httpbin'
+{% set ignore_tests = " --ignore=tests/integration" %}
+# E   fixture 'httpbin' not found
+{% set deselect_tests = " --deselect=tests/unit/test_unittest.py::test_testcase_playback" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_stubs.py::TestVCRConnection::test_body_consumed_once_stream" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_stubs.py::TestVCRConnection::test_body_consumed_once_iterator" %}
+# WIN path errors not found file with "/", neeeds "\\".
+{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_unittest.py::test_cassette_library_dir" %}  # [win]
+{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_unittest.py::test_vcr_kwargs_cassette_dir" %}  # [win]
 test:
+  source_files:
+    - tests
   imports:
     - vcr
     - vcr.persisters
     - vcr.serializers
     - vcr.stubs
-  requires:
-    - pip
   commands:
     - pip check
+    - pytest -v tests {{ ignore_tests }} {{ deselect_tests }}
+  requires:
+    - pip
+    - pytest
+    - requests >=2.22.0
 
 about:
   home: https://github.com/kevin1024/vcrpy
@@ -44,8 +59,9 @@ about:
   license_family: MIT
   license_file: LICENSE.txt
   summary: Automatically mock your HTTP interactions to simplify and speed up testing
+  description: This is a Python version of Ruby’s VCR library.
   dev_url: https://github.com/kevin1024/vcrpy
-  doc_url: https://vcrpy.readthedocs.io/
+  doc_url: https://vcrpy.readthedocs.io
 
 extra:
   recipe-maintainers:
