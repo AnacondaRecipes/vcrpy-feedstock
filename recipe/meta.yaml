@@ -26,6 +26,7 @@ requirements:
     - wrapt
     - yarl
     - urllib3 <2  # [py<310]
+    - urllib3  # [py>=310]
 
 # E   ModuleNotFoundError: No module named 'pytest_httpbin'
 {% set ignore_tests = " --ignore=tests/integration" %}
