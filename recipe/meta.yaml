@@ -19,6 +19,7 @@ requirements:
     - python
     - setuptools >=61.2
     - pip
+    - wheel
   run:
     - python
     - pyyaml
