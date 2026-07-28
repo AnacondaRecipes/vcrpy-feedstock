@@ -1,5 +1,5 @@
 {% set name = "vcrpy" %}
-{% set version = "8.0.0" %}
+{% set version = "8.3.0" %}
 
 package:
   name: {{ name }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 25622ec65c5c007597d417e6867ccb6e6ab0d5f8826e2a03feb5911b3011f8ad
+  sha256: 46d64e77e8d95e5c76c7d9a94ff05d8b38b2ae4e1d4869eb0235024b6fcb5212
 
 build:
   number: 0
@@ -17,7 +17,7 @@ build:
 requirements:
   host:
     - python
-    - setuptools
+    - setuptools >=61.2
     - pip
     - wheel
   run:
