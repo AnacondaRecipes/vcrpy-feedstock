@@ -1,15 +1,6 @@
 {% set name = "vcrpy" %}
 {% set version = "8.3.0" %}
-{% set ignore_tests = " --ignore=tests/integration" %}
-{% set deselect_tests = " --deselect=tests/unit/test_unittest.py::test_testcase_playback" %}
-{% set deselect_tests = 'deselect_tests + " --deselect=tests/unit/test_stubs.py::TestVCRConnection::test_body_consumed_once_stream"' %}
-{% set deselect_tests = 'deselect_tests + " --deselect=tests/unit/test_stubs.py::TestVCRConnection::test_body_consumed_once_iterator"' %}
-{% set deselect_tests = 'deselect_tests + " --deselect=tests/unit/test_unittest.py::test_cassette_library_dir"' %}  # [win]
-{% set deselect_tests = 'deselect_tests + " --deselect=tests/unit/test_unittest.py::test_vcr_kwargs_cassette_dir"' %}  # [win]
 
-# E   ModuleNotFoundError: No module named 'pytest_httpbin'
-# E   fixture 'httpbin' not found
-# WIN path errors not found file with "/", neeeds "\\".
 package:
   name: {{ name }}
   version: {{ version }}
@@ -33,6 +24,15 @@ requirements:
     - pyyaml
     - wrapt
 
+# E   ModuleNotFoundError: No module named 'pytest_httpbin'
+{% set ignore_tests = " --ignore=tests/integration" %}
+# E   fixture 'httpbin' not found
+{% set deselect_tests = " --deselect=tests/unit/test_unittest.py::test_testcase_playback" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_stubs.py::TestVCRConnection::test_body_consumed_once_stream" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_stubs.py::TestVCRConnection::test_body_consumed_once_iterator" %}
+# WIN path errors not found file with "/", neeeds "\\".
+{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_unittest.py::test_cassette_library_dir" %}  # [win]
+{% set deselect_tests = deselect_tests + " --deselect=tests/unit/test_unittest.py::test_vcr_kwargs_cassette_dir" %}  # [win]
 test:
   source_files:
     - tests
